@@ -2,6 +2,7 @@ LINK_TARGET = colors
 
 OBJS = \
        screencolors.o\
+       render.o
 
 REBUILDABLES = $(OBJS) $(LINK_TARGET)
 
@@ -14,6 +15,8 @@ $(LINK_TARGET): $(OBJS)
 
 %.o : %.c
 	gcc -o $@ -c $<
+
+render.h : render.c
 
 
 
