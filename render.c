@@ -9,6 +9,30 @@ typedef struct{
     int w;
     color **colors;
 }map;
+
+void logg(int i, int j)
+{
+    FILE *ptr = fopen("logg", "a");
+    if (ptr == NULL) {
+        printf("ERROR: something went wrong while opening file\n");
+    }
+    fprintf(ptr, "%d|%d\n",i,j);
+    fclose(ptr);
+}
+//Insertion sort to make the peices pretty
+void sortHelper(int arraySize, int* array)
+{
+    for(int i = 1; i<arraySize; i++)
+    {
+        int key = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > key) {
+            array[j + 1] = array[j];
+            j = j - 1;
+        }
+        array[j + 1] = key;
+    }
+}
 int basicLines(int set)
 {
     char randString[32];
@@ -103,7 +127,6 @@ int basicLines(int set)
                 //if this is all it takes...
                 if((t-q)<tmp)
                 {
-                    //logg(0,0);
                     for(int j = tmp-1; j>(tmp-1)-(t-q);j--) //starts at the changed unit and propagates (?) maybe (?)
                     //for(int j = tmp-1; j>(tmp-1)-f;j++)
                     {
@@ -121,7 +144,6 @@ int basicLines(int set)
                 else
                 {
                     q = -12;
-                    //logg(1,1);
                 }
             }
             else
@@ -141,7 +163,6 @@ int basicLines(int set)
                 }
                 if((t-q)<tmp)
                 {
-                    //logg(0,0);
                     for(int j = tmp-1; j>(tmp-1)-(t-q);j--) //starts at the changed unit and propagates (?) maybe (?)
                     //for(int j = tmp-1; j>(tmp-1)-f;j++)
                     {
@@ -200,24 +221,89 @@ int forfunsies(int h, int w)
     int r = randombytes_uniform(225);
     int g = randombytes_uniform(225);
     int b = randombytes_uniform(225);
+    int lim = 0;
+    for(int i = 0; i<h; i++)
+    {
+        for(int j = 0; j<w; j++)
+        {
+            horror[i][j][0] = r;
+            horror[i][j][1] = g;
+            horror[i][j][2] = b;
+
+        }
+    }
+    //funsiesHelper(h,w,horror);
+    //return 0;
+    int randh = randombytes_uniform(h);
+    int randw = randombytes_uniform(w);
+    int randc = randombytes_uniform(3);
+    //this is the guy I'm going to mess with!
     while(1 == 1)
     {
-        for(int i = 0; i<h; i++)
+        int testarr[4] = {randh, randw, h-randh, w-randw};
+        sortHelper(4,testarr);
+        lim = testarr[3];
+        int thing = 0;
+        lim = testarr[3];
+        while(thing < lim)
         {
-            for(int j = 0; j<w; j++)
+            int i=0;
+            for(int i = 0; i<thing; i++)
             {
-                horror[i][j][0] = r;
-                if(r<225) r++;
-                else r--;
-                horror[i][j][1] = g;
-                if(r<225) r++;
-                else r--;
-                horror[i][j][2] = b;
-                if(r<225) r++;
-                else r--;
+                //printf("%d",i);
+                    if(i == 0&&horror[randh][randw][randc]<225)
+                    {
+                        horror[randh][randw][randc]+=1;
+                    }
+                    else{
+                        if(randh-i >= 0 && randw-i >=0&&horror[randh-i][randw-i][randc] <225)
+                        {
+                            horror[randh-i][randw-i][randc] +=1;
+                        }
+                        if(randh+i < h && randw+i <w&&horror[randh+i][randw+i][randc]<225)
+                        {
+                            horror[randh+i][randw+i][randc] +=1;
+                        }
+                        if(randh-i >= 0 && randw+i <w&&horror[randh-i][randw+i][randc]<225)
+                        {
+                            horror[randh-i][randw+i][randc] +=1;
+                        }
+                        if(randh+i < h && randw-i >= 0&&horror[randh+i][randw-i][randc]<225)
+                        {
+                            horror[randh+i][randw-i][randc] +=1;
+                        }
+                        if(randw-i >=0&&horror[randh][randw-i][randc]<225)
+                        {
+                            horror[randh][randw-i][randc] +=1;
+                        }
+                        if(randw+i <w&&horror[randh][randw+i][randc]<225)
+                        {
+                            horror[randh][randw+i][randc] +=1;
+                        }
+                        if(randh-i >=0&& horror[randh-i][randw][randc]<225)
+                        {
+                            horror[randh-i][randw][randc] +=1;
+                        }
+                        if(randh+i <h&&horror[randh+i][randw][randc]<225)
+                        {
+                            horror[randh+i][randw][randc] +=1;
+                        }
+                    }
+
+                //funsiesHelper(h,w,horror);
             }
+            funsiesHelper(h,w,horror);
+            printf("\n");
+            sleep(0.75);
+            //getchar();
+            thing ++;
         }
-        funsiesHelper(h,w,horror);
+            randh = randombytes_uniform(h);
+            randw = randombytes_uniform(w);
+            randc = randombytes_uniform(3);
+            sortHelper(4,testarr);
+            lim = testarr[0];
+            //return 0;
     }
 
     return 0;

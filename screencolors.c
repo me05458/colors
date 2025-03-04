@@ -21,6 +21,17 @@ int getConfig(int line) //return - 0 cool, 1- bad
     return result;
 
 }
+void testScreen(int h, int w)
+{
+    for(int i = 0; i<h; i++)
+    {
+        for(int j = 0; j<w; j++)
+        {
+            printf("-]");
+        }
+        printf("\n");
+    }
+}
 //turns chars into ints
 int charEater(char c)
 {
@@ -28,15 +39,6 @@ int charEater(char c)
     if(result > 9||result<0) //it's a letter/other character
         return -1;
     return result;
-}
-void logg(int i, int j)
-{
-    FILE *ptr = fopen("logg", "a");
-    if (ptr == NULL) {
-        printf("ERROR: something went wrong while opening file\n");
-    }
-    fprintf(ptr, "%d|%d\n",i,j);
-    fclose(ptr);
 }
 //printf("\x1b[38;2;%d;%d;%dmsomething\x1b[0m\n",red,blue,transparency);
 int main(int argc, char *argv[]) {
@@ -67,50 +69,96 @@ int main(int argc, char *argv[]) {
         }
         return basicLines(set);
     }
-    if(getConfig(1)==2)
-    {
-        int x = 0;
-        int y = 0;
-        if(argc <=2)
+    else {
+        if(getConfig(1)==2)
         {
-            y = 10;
-            x = 10;
+            int x = 0;
+            int y = 0;
+            if(argc <=2)
+            {
+                y = 10;
+                x = 10;
+            }
+            else
+            {
+                int counter = 0;
+                char c = argv[1][counter];
+                while(c != NULL)
+                {
+                    counter++;
+                    c = argv[1][counter];
+                }
+                for(int i=counter-1; i>=0; i--)
+                {
+                    int tmp = charEater(argv[1][(counter-1)-i]);
+                    //int tmp = 1;
+                    x+=tmp*(int)pow(10,i);
+                }
+                counter = 0;
+                c = argv[1][counter];
+                while(c != NULL)
+                {
+                    counter++;
+                    c = argv[2][counter];
+                }
+                for(int i=counter-1; i>=0; i--)
+                {
+                    int tmp = charEater(argv[2][(counter-1)-i]);
+                    //int tmp = 1;
+                    y+=tmp*(int)pow(10,i);
+                }
+            }
+            return forfunsies(x,y);
         }
         else
         {
-            int counter = 0;
-            char c = argv[1][counter];
-            while(c != NULL)
+            if(getConfig(1) == 3)
             {
-                counter++;
-                c = argv[1][counter];
+                int x = 0;
+                int y = 0;
+                if(argc <=2)
+                {
+                    y = 10;
+                    x = 10;
+                }
+                else
+                {
+                    int counter = 0;
+                    char c = argv[1][counter];
+                    while(c != NULL)
+                    {
+                        counter++;
+                        c = argv[1][counter];
+                    }
+                    for(int i=counter-1; i>=0; i--)
+                    {
+                        int tmp = charEater(argv[1][(counter-1)-i]);
+                        //int tmp = 1;
+                        x+=tmp*(int)pow(10,i);
+                    }
+                    counter = 0;
+                    c = argv[1][counter];
+                    while(c != NULL)
+                    {
+                        counter++;
+                        c = argv[2][counter];
+                    }
+                    for(int i=counter-1; i>=0; i--)
+                    {
+                        int tmp = charEater(argv[2][(counter-1)-i]);
+                        //int tmp = 1;
+                        y+=tmp*(int)pow(10,i);
+                    }
+                }
+                testScreen(x,y);
+                return 0;
             }
-            for(int i=counter-1; i>=0; i--)
+            else
             {
-                int tmp = charEater(argv[1][(counter-1)-i]);
-                //int tmp = 1;
-                x+=tmp*(int)pow(10,i);
-            }
-            counter = 0;
-            c = argv[1][counter];
-            while(c != NULL)
-            {
-                counter++;
-                c = argv[2][counter];
-            }
-            for(int i=counter-1; i>=0; i--)
-            {
-                int tmp = charEater(argv[2][(counter-1)-i]);
-                //int tmp = 1;
-                y+=tmp*(int)pow(10,i);
+                printf("ERROR: config is not set up\n");
+                return 0;
             }
         }
-        return forfunsies(x,y);
-    }
-    else
-    {
-        printf("ERROR: config is not set up\n");
-        return 0;
     }
     //return basicLines(set);
 }
