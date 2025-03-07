@@ -25,10 +25,12 @@ void testScreen(int h, int w)
 {
     for(int i = 0; i<h; i++)
     {
+        printf("\x1b[48;2;%d;%d;%dm",225-(i*(225/h)),225-(i*(225/h)),225);
         for(int j = 0; j<w; j++)
         {
-            printf("-]");
+            printf("  ");
         }
+        printf("\x1b[0m");
         printf("\n");
     }
 }
