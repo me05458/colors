@@ -157,8 +157,51 @@ int main(int argc, char *argv[]) {
             }
             else
             {
-                printf("ERROR: config is not set up\n");
-                return 0;
+                if(getConfig(1) == 4)
+                {
+                    int x = 0;
+                    int y = 0;
+                    if(argc <=2)
+                    {
+                        y = 10;
+                        x = 10;
+                    }
+                    else
+                    {
+                        int counter = 0;
+                        char c = argv[1][counter];
+                        while(c != NULL)
+                        {
+                            counter++;
+                            c = argv[1][counter];
+                        }
+                        for(int i=counter-1; i>=0; i--)
+                        {
+                            int tmp = charEater(argv[1][(counter-1)-i]);
+                            //int tmp = 1;
+                            x+=tmp*(int)pow(10,i);
+                        }
+                        counter = 0;
+                        c = argv[1][counter];
+                        while(c != NULL)
+                        {
+                            counter++;
+                            c = argv[2][counter];
+                        }
+                        for(int i=counter-1; i>=0; i--)
+                        {
+                            int tmp = charEater(argv[2][(counter-1)-i]);
+                            //int tmp = 1;
+                            y+=tmp*(int)pow(10,i);
+                        }
+                    }
+                    radialMode(x,y);
+                }
+                else
+                {
+                    printf("ERROR: config is not set up\n");
+                    return 0;
+                }
             }
         }
     }

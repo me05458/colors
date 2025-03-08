@@ -1,6 +1,8 @@
 #include <sodium.h>
 #include<stdio.h>
 #include <unistd.h>
+#include<time.h>
+
 typedef struct{
     int rgb[3]; //doesn't necessarily have that many numbers, just spaces for em;
 }color;
@@ -10,6 +12,11 @@ typedef struct{
     color **colors;
 }map;
 
+void wait(int ms) //this is such a funny way of sleeping this is what I shall do.
+{
+    clock_t start_time = clock();
+    while (clock() < start_time + ms);
+}
 void logg(int i, int j)
 {
     FILE *ptr = fopen("logg", "a");
@@ -193,7 +200,7 @@ int basicLines(int set)
             printf("\x1b[48;2;%d;%d;%dm  \x1b[0m",screen[i].rgb[0],screen[i].rgb[1],screen[i].rgb[2]);
         }
         printf("\n");
-        sleep(0.5);
+        wait(10000);
         //m++;
     }
     return 0;
@@ -237,7 +244,6 @@ int forfunsies(int h, int w)
     int randh = randombytes_uniform(h);
     int randw = randombytes_uniform(w);
     int randc = randombytes_uniform(3);
-    //this is the guy I'm going to mess with!
     while(1 == 1)
     {
         int testarr[4] = {randh, randw, h-randh, w-randw};
@@ -293,8 +299,7 @@ int forfunsies(int h, int w)
                 //funsiesHelper(h,w,horror);
             }
             funsiesHelper(h,w,horror);
-            printf("\n");
-            sleep(0.75);
+            wait(10000);
             //getchar();
             thing ++;
         }
@@ -305,6 +310,84 @@ int forfunsies(int h, int w)
             lim = testarr[0];
             //return 0;
     }
+
+    return 0;
+}
+int radialMode(int h, int w)
+{
+    char randString[32];
+    if(sodium_init() <0){
+        printf("A Catastrophic Faliure Occured (EXIT CODE 2)\n");
+        return 2;
+    }
+    randombytes_buf(randString, 32);
+    int happening = randombytes_uniform(1);
+    int r = randombytes_uniform(2);
+    int g = randombytes_uniform(2);
+    int b = randombytes_uniform(2);
+    int curr = 225;
+    int curg = 225;
+    int curb = 225;
+    int a = 1;
+    while(1==1)
+    {
+            while(a < 225)
+            {
+                if(r == 1)
+                {
+                    curr = a;
+                }
+                if(g == 1)
+                {
+                    curg = a;
+                }
+                if(b == 1)
+                {
+                    curb = a;
+                }
+                printf("\x1b[48;2;%d;%d;%dm",curr,curg,curb);
+                for(int j = 0; j<w; j++)
+                {
+                    printf("  ");
+                }
+                printf("\x1b[0m");
+                printf("\n");
+                a++;
+                wait(10000);
+            }
+            while(a > 0)
+            {
+                if(r == 1)
+                {
+                    curr = a;
+                }
+                if(g == 1)
+                {
+                    curg = a;
+                }
+                if(b == 1)
+                {
+                    curb = a;
+                }
+                printf("\x1b[48;2;%d;%d;%dm",curr,curg,curb);
+                for(int j = 0; j<w; j++)
+                {
+                    printf("  ");
+                }
+                printf("\x1b[0m");
+                printf("\n");
+                a--;
+                wait(10000);
+            }
+            r = randombytes_uniform(2);
+            g = randombytes_uniform(2);
+            b = randombytes_uniform(2);
+        }
+        /*if(happening == 1)
+        {
+
+        }*/
+
 
     return 0;
 }
