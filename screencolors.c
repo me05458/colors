@@ -4,9 +4,9 @@
 #include<stdio.h>
 
 int getConfig(int line) //return - 0 cool, 1- bad
-{
-    FILE *ptr = fopen("config", "r");
-    if (ptr == NULL) {
+{//reads a line from config file
+    FILE *ptr = fopen("config", "r"); //open file
+    if (ptr == NULL) { //oh no panic
         printf("ERROR: something went wrong while opening file\n");
     }
     int result = -1;
@@ -21,19 +21,6 @@ int getConfig(int line) //return - 0 cool, 1- bad
     return result;
 
 }
-void testScreen(int h, int w)
-{
-    for(int i = 0; i<h; i++)
-    {
-        printf("\x1b[48;2;%d;%d;%dm",225-(i*(225/h)),225-(i*(225/h)),225);
-        for(int j = 0; j<w; j++)
-        {
-            printf("  ");
-        }
-        printf("\x1b[0m");
-        printf("\n");
-    }
-}
 //turns chars into ints
 int charEater(char c)
 {
@@ -46,10 +33,10 @@ int charEater(char c)
 int main(int argc, char *argv[]) {
     //printf("\x1b[38;2;%d;%d;0mhi\n\x1b[0m",i,225-i);
     //library init
-    if(getConfig(1) == 1)
+    if(getConfig(1) == 1) //if mode 1 then basic lines
     {
-        int set = 0;
-        if(argc ==1)
+        int set = 0; //will be size
+        if(argc ==1) //if no arguments specified, 10 is default size
         {
             set = 10;
         }
@@ -57,6 +44,7 @@ int main(int argc, char *argv[]) {
         {
             int counter = 0;
             char c = argv[1][counter];
+            //slurp up each character and multiply 10^its possition to make the full number
             while(c != NULL)
             {
                 counter++;
@@ -69,20 +57,21 @@ int main(int argc, char *argv[]) {
                 set+=tmp*(int)pow(10,i);
             }
         }
-        return basicLines(set);
+        return basicLines(set); //make basic lines
     }
     else {
-        if(getConfig(1)==2)
+        if(getConfig(1)==2) //if config is 2 then draw stars
         {
-            int x = 0;
+            int x = 0; //these will be the dimensions
             int y = 0;
-            if(argc <=2)
+            if(argc <=2) //if not enough arguments default = 10 in both directions
             {
                 y = 10;
                 x = 10;
             }
             else
             {
+                //slurp up the numbers as in config mode 1
                 int counter = 0;
                 char c = argv[1][counter];
                 while(c != NULL)
@@ -110,21 +99,22 @@ int main(int argc, char *argv[]) {
                     y+=tmp*(int)pow(10,i);
                 }
             }
-            return forfunsies(x,y);
+            return forfunsies(x,y); //this draws the stars
         }
         else
         {
-            if(getConfig(1) == 3)
+            if(getConfig(1) == 3) //if config mode = 3 test screen size
             {
-                int x = 0;
+                int x = 0; //this will be the size
                 int y = 0;
-                if(argc <=2)
+                if(argc <=2) //if not enough arguments, defalt = 10
                 {
                     y = 10;
                     x = 10;
                 }
                 else
                 {
+                    //slurp up the size as above
                     int counter = 0;
                     char c = argv[1][counter];
                     while(c != NULL)
@@ -152,21 +142,21 @@ int main(int argc, char *argv[]) {
                         y+=tmp*(int)pow(10,i);
                     }
                 }
-                testScreen(x,y);
+                testScreen(x,y); //this will print a test square
                 return 0;
             }
             else
             {
-                if(getConfig(1) == 4)
+                if(getConfig(1) == 4) //if config is 4, pretty gradient mode
                 {
-                    int x = 0;
+                    int x = 0; //this will be the size (note that x doesn't matter for now)
                     int y = 0;
-                    if(argc <=2)
+                    if(argc <=2) //if not enough arguments, default = 10
                     {
                         y = 10;
                         x = 10;
                     }
-                    else
+                    else //slurp up the size
                     {
                         int counter = 0;
                         char c = argv[1][counter];
@@ -195,15 +185,14 @@ int main(int argc, char *argv[]) {
                             y+=tmp*(int)pow(10,i);
                         }
                     }
-                    radialMode(x,y);
+                    radialMode(x,y); //this will do the gradients
                 }
                 else
                 {
-                    printf("ERROR: config is not set up\n");
+                    printf("ERROR: config is not set up\n"); //if nothing, give user an error
                     return 0;
                 }
             }
         }
     }
-    //return basicLines(set);
 }
